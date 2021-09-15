@@ -11,7 +11,8 @@ options = Options()
 options.headless = True
 options.add_argument("--window-size=1920,1200")
 
-DRIVER_PATH = 'C:\\Users\\Luuk\\Downloads\\chromedriver_win32\\chromedriver.exe'
+#DRIVER_PATH = 'C:\\Users\\Luuk\\Downloads\\chromedriver_win32\\chromedriver.exe'
+DRIVER_PATH = 'C:\\Users\\lschneid\\OneDrive - Centric\\Documents\\chromedriver\\chromedriver.exe'
 driver = webdriver.Chrome(executable_path=DRIVER_PATH)
 driver.get('https://huurwoningen.nl/in/groningen')
 
@@ -57,7 +58,7 @@ def huurwoningen(df):
             # (outside of function) append df with placeholder
 
         try:
-            if counter < 20:    #first listing -- WORKS WITH NORMAL COUNTER AS WELL -- adjust to normal, not complete XPATH
+            if counter < 20:
                 dict["prijs"].append(driver.find_element_by_xpath(f'//*[@id="listings"]/section[{counter}]/section/div[1]/span/div/span[1]').get_attribute("innerHTML"))
                 dict["grootte"].append(driver.find_element_by_xpath(f'//*[@id="listings"]/section[{counter}]/section/div[1]/div[4]/dl/dd[1]/span[2]').get_attribute("innerHTML"))
                 dict["kamers"].append(driver.find_element_by_xpath(f'//*[@id="listings"]/section[{counter}]/section/div[1]/div[4]/dl/dd[2]/span[2]').get_attribute("innerHTML"))
@@ -65,7 +66,7 @@ def huurwoningen(df):
                 dict["wijk"].append(driver.find_element_by_xpath(f'//*[@id="listings"]/section[{counter}]/section/div[1]/div[1]').get_attribute("innerHTML"))
                 dict["link"].append(driver.find_element_by_xpath(f'//*[@id="listings"]/section[{counter}]/section/div[1]/a').get_attribute("href"))
                 dict["source"].append(driver.find_element_by_xpath(f'//*[@id="listings"]/section[{counter}]/section/div[1]/a').get_attribute("href").split('.nl')[0])
-                output = df.append(dict, ignore_index = True)
+                output = df.append(data=dict, ignore_index = True)
             elif counter == 20:
                 driver.find_element_by_xpath('//*[@id="pagination"]/ul/li[7]/a').click()
                 counter = 1     #can also call it recursively?
@@ -73,10 +74,12 @@ def huurwoningen(df):
         except selenium.common.exceptions.NoSuchElementException:
             print('except error')
             break
-    return output
         #except:
             #mail me
             #s = smtplib.SMTP("localhost")
+            # https://docs.python.org/3/library/email.examples.html
+    return output
+
         #additional 'except' which notifies me of issues with the specific website and error
     
 
@@ -103,13 +106,13 @@ def funda():
 
 column_names = ["prijs", "grootte", "kamers", "locatie", "wijk", "beschrijving", "link", "website"]
 
-# prijs = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/span/div/span[1]').get_attribute("innerHTML")
-# grootte = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/div[4]/dl/dd[1]/span[2]').get_attribute("innerHTML") 
-# kamers = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/div[4]/dl/dd[2]/span[2]').get_attribute("innerHTML") 
-# locatie = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/a/h2/span[2]/span[1]').get_attribute("innerHTML")  
-# wijk = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/div[1]').get_attribute("innerHTML") 
-# link = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/a').get_attribute("href")
-# source = driver.find_element_by_xpath('/html/head/link[7]').get_attribute("href").split('.nl')[0]
+prijs = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/span/div/span[1]').get_attribute("innerHTML")
+grootte = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/div[4]/dl/dd[1]/span[2]').get_attribute("innerHTML") 
+kamers = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/div[4]/dl/dd[2]/span[2]').get_attribute("innerHTML") 
+locatie = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/a/h2/span[2]/span[1]').get_attribute("innerHTML")  
+wijk = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/div[1]').get_attribute("innerHTML") 
+link = driver.find_element_by_xpath('//*[@id="listings"]/section[1]/section/div[1]/a').get_attribute("href")
+source = driver.find_element_by_xpath('/html/head/link[7]').get_attribute("href").split('.nl')[0]
 
 df_dict = {}
 
@@ -121,30 +124,49 @@ df_dict["wijk"] = ['placeholder']
 df_dict["link"] = ['placeholder']
 df_dict["source"] = ['placeholder']
 
-# df_dict["prijs"].append(prijs)
-# df_dict["grootte"].append(grootte)
-# df_dict["kamers"].append(kamers)
-# df_dict["locatie"].append(locatie)
-# df_dict["wijk"].append(wijk)
-# df_dict["link"].append(link)
-# df_dict["source"].append(source)
+df_dict["prijs"].append(prijs)
+df_dict["grootte"].append(grootte)
+df_dict["kamers"].append(kamers)
+df_dict["locatie"].append(locatie)
+df_dict["wijk"].append(wijk)
+df_dict["link"].append(link)
+df_dict["source"].append(source)
 
-# df_dict2 = {}
+df_dict2 = {}
 
-# df_dict2["prijs"] = 'prijs'
-# df_dict2["grootte"] = 'grootte'
-# df_dict2["kamers"] = 'kamers'
-# df_dict2["locatie"] ='locatie'
-# df_dict2["wijk"] ='wijk'
-# df_dict2["link"]= 'link'
-# df_dict2["source"] = 'source'
+df_dict2["prijs"] = 'prijs'
+df_dict2["grootte"] = 'grootte'
+df_dict2["kamers"] = 'kamers'
+df_dict2["locatie"] ='locatie'
+df_dict2["wijk"] ='wijk'
+df_dict2["link"]= 'link'
+df_dict2["source"] = 'source'
 
 woningen_df = pd.DataFrame(data=df_dict)
 
-# output = df3.append(df_dict2, ignore_index=True)
+output = woningen_df.append(df_dict2, ignore_index=True)
 
-print(huurwoningen(woningen_df))
+print(output)      #output returns the new df
 
+df_dict3 = {}
+
+df_dict3["prijs"] = 'prijs2'
+df_dict3["grootte"] = 'grootte2'
+df_dict3["kamers"] = 'kamer2s'
+df_dict3["locatie"] ='locatie2'
+df_dict3["wijk"] ='wij2k'
+df_dict3["link"]= 'lin2'
+df_dict3["source"] = 'source2'
+
+output = woningen_df.append(df_dict3, ignore_index=True)        #this replaces the data. need to find a way to append it 
+
+print(output)
+
+#print(huurwoningen(woningen_df))
+
+
+#df = pd.concat([df1, df2], axis=1, join_axes=[df.index])   https://stackoverflow.com/questions/27719407/pandas-concat-valueerror-shape-of-passed-values-is-blah-indices-imply-blah2
+#https://www.kite.com/python/docs/builtins.zip
 
 ##append everything to csv
 
@@ -155,6 +177,11 @@ print(huurwoningen(woningen_df))
 #remove the ones which are not on the websites, thus the native df
 
 #pd.to_csv(woningen_df)
+
+
+
+# can block some requests being made with selenium to speed up scraping:
+    # https://www.scrapingbee.com/blog/selenium-python/ --> further down page
 
 driver.quit()
 
